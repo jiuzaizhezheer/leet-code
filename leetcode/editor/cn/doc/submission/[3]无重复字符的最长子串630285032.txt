@@ -1,0 +1,30 @@
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        //String s1 = "a b c a b c b b";
+        if (s.length() < 2) {
+            return s.length();
+        }
+        //初始长度为0
+        int max=0;
+        //转化为数组遍历;
+        char[] charArray = s.toCharArray();
+        int length = charArray.length;
+        HashSet<Character> set = new HashSet<>();
+        set.add(charArray[0]);
+        //右指针确定可能的终点
+        int r=1;
+        //左指针确定起点
+        for (int l = 0; l < length ; l++) {
+            if(r==length-1 && r-l+1<=max)break;
+            while (r < length && !set.contains(charArray[r])){
+                set.add(charArray[r]);
+                r++;
+            }
+            max=Math.max(max,r-l);
+            set.remove(charArray[l]);
+        }
+        return max;
+    }
+}
+//runtime:8 ms
+//memory:43.7 MB

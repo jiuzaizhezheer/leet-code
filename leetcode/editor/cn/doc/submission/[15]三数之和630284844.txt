@@ -1,0 +1,66 @@
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+    if (nums == null || nums.length < 3) return new ArrayList<>();
+        //排序，比如{-4,-1,-1,0,1,2};
+        Arrays.sort(nums);
+        Arrays.stream(nums).forEach(x -> {
+        });
+        int length = nums.length;
+        //定义返回容器
+        List<List<Integer>> resultList = new ArrayList<>();
+        //i+j+k=0,-i=i+j,取一个数，使用双指针
+        for (int i = 0; i < length - 2; i++) {
+            //这一次与上一次元素相同，跳过
+            if (i >= 1 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            //优化逻辑
+            if (nums[i] + nums[i + 1] + nums[i + 2] > 0) {
+                break;
+            }
+            if (nums[i] + nums[length - 1] + nums[length - 2] < 0) {
+                continue;
+            }
+            //定义左，右指针
+            int l = i + 1, r = length - 1;
+            //定义target=-i=j+k
+            int target = -nums[i];
+            //开始进行双指针操作
+            while (l < r) {
+                //这样去重也行单过于冗余
+//                while (l < r && l >= i + 2 && nums[l] == nums[l - 1]) l++;
+//                while ( l < r && r <= length - 2 && nums[r] == nums[r + 1]) r--;
+//                if(l==r){
+//                    break;
+//                }
+                int x = nums[l] + nums[r];
+                if (x > target) {
+                    r--;
+                } else if (x < target) {
+                    l++;
+                } else {
+                    List<Integer> triplet = new ArrayList<>();
+                    triplet.add(nums[i]);
+                    triplet.add(nums[l]);
+                    triplet.add(nums[r]);
+                    resultList.add(triplet);
+                    l++;
+                    r--;
+                    /* 跳过重复的 l 和 r
+                     * 衍生作用 223456，123455，（2，6）（1，5）满足，2，5只会更小，2,5只会更大，此时相当于跳过无效值
+                     * 主要作用 2 2 3 4 5 5，2，5满足，此时2 3 4 5，又满足2=2，跳过，345，5又重复，跳过3,4
+                     * r-1对应的数只能等于或小于，此时l+1只要一重复就可跳过（双重作用）同理，r一旦重复也就跳过
+                     * 始终保持l<r 到达临界值则说明 2 2 2 2   or   2 2 5 5
+                     * */
+                    while (l < r && nums[l] == nums[l - 1]) l++;
+                    while (l < r && nums[r] == nums[r + 1]) r--;
+//                  while (l < r && nums[r] == nums[r + 1] && nums[l] ==  nums[l - 1]) r--;l++;
+            
+                }
+            }
+        }
+        return resultList;
+    }
+}
+//runtime:28 ms
+//memory:51.8 MB

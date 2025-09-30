@@ -1,0 +1,25 @@
+class Solution {
+    public int maxArea(int[] height) {
+       //数组中元素实际上就是索引index对应的h，大小由最小高度决定，求max=(j-i)*min(height[i],height[j])
+        //  最左边  最右边
+        int left=0,right=height.length-1;
+        //假设一个max，然后迭代
+        int max = (right-left)*Math.min(height[left],height[right]);
+        //每次移动高度较小的一边，才有可能更大，最后left<right
+        while (left+1<right){
+            if(height[left]<height[right]){
+                left++;
+            }else{
+                right--;
+            }
+            //定义新的可能的max
+            int tempMax=(right-left)*Math.min(height[left],height[right]);
+            //比较出最大值
+            max=Math.max(max,tempMax);
+        }//直到临界条件，退出循环，即可得到最终结果MAX
+
+        return max; 
+    }
+}
+//runtime:5 ms
+//memory:57 MB
